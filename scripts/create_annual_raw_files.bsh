@@ -1,0 +1,18 @@
+#!/bin/bash
+#This script creates an annual time series, by water year, from a monthly timeseries.
+
+start=$1
+end=$2
+ppy=$3
+unitsw=$4
+sitelist=$5
+for locname in $(cat $sitelist)
+do
+
+#echo  creating annual time series for $locname
+./x_to_annual in/$locname.month $start $end $ppy $unitsw > in/$locname.year 
+
+
+done
+
+

@@ -1,0 +1,46 @@
+#!/bin/bash
+#$ -cwd
+#$ -j y
+#$ -S /bin/bash
+#$ -M seyeunlee.s@gmail.com
+#$ -q default.q@compute-*-*
+
+biasdir=$(pwd)/
+homedir=/raid3/leesy/projects/FWS/data/cmip5/
+sitelist=bc_site_list_all
+
+## Change inputdir and outputdir for each scenario.
+## Inputdir is the place where raw vic data is.
+## Outputdir is the place where raw daily and  month vic data and bias corrected vic data are located.
+while read -r f1 f2 f3 f4 f5
+do
+    inputdir=${homedir}${f1}/filedir/
+    startyr=$f2
+    endyr=$f3
+    startnr=$f4
+    endnr=$f5
+    outputdir=$inputdir
+    sitelist=site_list_wy1964    ## bc_site_list_all
+    startwy=$((f2+1))
+    echo $startwy
+
+#    cd $inputdir
+#    rm -f *.bc*
+
+    for  file in $(cat $sitelist)
+    do
+	echo $file
+
+	awk '{if(NR >= '$startnr'  && NR <= '$endnr') print $3;}' ${inputdir}${file}.month > ${biasdir}in/"$file".month
+### check
+##  awk '{if (NR == 10 || NR == 669) print $1,$2,$3}' /raid3/leesy/projects/FWS/data/cmip5/bcc-csm1-1-m__rcp45/filedir/Yakima.month
+##  awk '{if (NR == 10 || NR == 1029) print $1,$2,$3}' /raid3/leesy/projects/FWS/data/cmip5/bcc-csm1-1-m__rcp45/filedir/Yakima.month
+    done
+
+    cd $biasdir
+    pwd
+### Read WY 1951-2005 (from Oct 1950 to Sep 2005) out of (Total data is Jan 1950 to Dec 2005) for historical
+### and WY 2007-2099 for rcp45 and rcp85
+    ./extract_cc_forecast.bsh  $inputdir $startwy $endyr $biasdir/  $sitelist
+
+done < dir_list_all

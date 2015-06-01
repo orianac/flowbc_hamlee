@@ -1,0 +1,20 @@
+#!/bin/bash
+#$ -cwd
+#$ -j y
+#$ -S /bin/bash
+#$ -M seyeunlee.s@gmail.com
+#$ -q default.q@compute-0-*
+
+
+#This program compiles a list of c programs in the current directory
+
+for site in PDRLC CARSO CLEAR CONSU GBSRS LK_MC N_HOG PRD-C TRINI
+do
+mv training_data/$site.month.obs training_data/temp_$site.month.obs
+#awk '{if ($1==0) print 0.0001; else print $1}' training_data/temp_$site.month.obs > training_data/$site.month.obs
+awk '{if ($1==0.0001) print (0.0000001*NR); else print $1}' training_data/temp_$site.month.obs > training_data/$site.month.obs
+#awk '{if ($1==0) print NR}' training_data/$site.month.obs >> corrected_month.obs
+#awk '{if ($1==0) print NR}' training_data/temp_$site.month.obs >> old_month.obs
+diff  training_data/$site.month.obs  training_data/temp_$site.month.obs >> diff
+done 
+

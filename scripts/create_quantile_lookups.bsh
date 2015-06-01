@@ -1,0 +1,117 @@
+#!/bin/bash
+#$ -cwd
+#$ -j y
+#$ -S /bin/bash
+#$ -M seyeunlee.s@gmail.com
+#$ -q default.q@compute-0-*
+
+#This script creates a ranked list of streamflows for each monthly period of the year,
+#and then constructs a look up table of exceedence probability and value.
+
+#The input file can be any length, but must begin in a consistent month in the record
+#For long records of 365 day weeks, the seasonality will gradually shift later in the year (one day per year)
+# and should be adjusted in the preprocessing step below.
+
+#Make sure number of periods per year is correct in the steps below, and that the path to the working directory is correct in both the monthly and annual calculations.
+
+#In this version the incremental files are fit with an EV1 distribution, and the main streamflow files are fit with LN distribution.  This is necessary because of negative incremental values that are incompatible with the LN distribution.
+biasdir=$1
+echo $biasdir
+echo CREATING MONTHLY QUANTILE LOOKUPS USING LN DISTRIBUTION
+
+dist_opt=1
+
+cd training_data/
+
+for infile in *month*
+do
+cd $biasdir 
+
+echo processing training_data/$infile
+
+outfile=quantiles_$infile
+
+#clear temp6 file
+echo > temp6
+echo > ln_log
+
+
+#calculate the number of full years of data in monthly file and write to temp1
+awk '{if((NR-1)%12==11) n++;} END {print n;}' training_data/$infile > temp1
+cat temp1 training_data/$infile > temp2
+
+
+#loop over 12 months
+month=0
+while [ $month -le 11 ]
+do
+echo month=$month
+#write raw data for appropriate time period to a temp file 
+awk '{if(NR==1) n=$1; if(NR>1 && NR-1<=n*12 && (NR-2)%12=='$month') print $1}' temp2  > temp3
+
+#rank streamflow values and write to a temp file
+sort -n -r temp3 > temp4
+wc temp4
+cat temp1 temp4 > temp5
+
+#create quantile look up and append to output file
+#quantile estimator from handbook of hydrology pg 18.25 Cunnane estimator
+
+./dist_param temp4 $dist_opt >> ln3_log
+./dist_param temp4  $dist_opt >> temp6
+
+awk '{if(NR==1){ n=$1;} if(NR>1) {q=(NR-1-0.4)/(n+0.2); print q, $1;} }' temp5 >> temp6 
+
+month=$((month+1))
+done
+
+cat temp1 temp6 > $outfile
+done
+
+echo CREATING YEARLY QUANTILE LOOKUPS USING LN DISTRIBUTION
+
+dist_opt=1
+
+#Create yearly tables from main yearly files
+
+cd training_data/
+
+for infile in *year*
+do
+cd $biasdir 
+
+echo processing training_data/$infile
+
+outfile=quantiles_$infile
+
+
+#clear temp6 file
+
+echo > temp6
+echo > ln_log
+
+
+#calculate the number of full years of data in monthly file and write to temp1
+
+awk '{n++;} END {print n;}' training_data/$infile > temp1
+cat temp1 training_data/$infile > temp2
+
+#write out raw data to a temp file 
+awk '{if(NR==1) n=$1; if(NR>1) print $1}' temp2  > temp3
+
+#rank streamflow values and write to a temp file
+sort -n -r temp3 > temp4
+wc temp4
+cat temp1 temp4 > temp5
+
+#create quantile look up and append to output file
+#quantile estimator from handbook of hydrology pg 18.25 Cunnane estimator
+
+./dist_param temp4 $dist_opt >> ln3_log
+./dist_param temp4 $dist_opt >> temp6
+
+awk '{if(NR==1){ n=$1;} if(NR>1) {q=(NR-1-0.4)/(n+0.2); print q, $1;} }' temp5 >> temp6 
+
+cat temp1 temp6 > $outfile
+done
+
