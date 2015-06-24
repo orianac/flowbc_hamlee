@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 	  i=0;
 	  for( j=0; j<=DayYear; j++)
 	    {
-	      fprintf(outfile, "%10.0f\n", OneYear[j]);
+	      fprintf(outfile, "%10.3f\n", OneYear[j]);
 	    }
 	}
       n++;

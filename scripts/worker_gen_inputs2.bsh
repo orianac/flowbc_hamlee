@@ -1,0 +1,32 @@
+#!/bin/bash
+
+ts_monthly=$1
+outprefix=$2
+cfg_proj=$3
+cfg_scen=$4
+traindir=$5
+
+source $cfg_proj 
+source $cfg_scen
+
+###################################
+## Create monthly training files ##
+###################################
+
+echo $STARTNR_MON $ENDNR_MON $ts_monthly $traindir/$outprefix.wy
+## Get training data from vic simulation
+awk '{if (NR >= '$STARTNR_MON' && NR <= '$ENDNR_MON') print $2}' $ts_monthly > $traindir/$outprefix.wy
+
+##################################
+## Create annual training files ##
+##################################
+
+echo $BINDIR/x_to_annual $traindir/$outprefix.wy $STARTWY $ENDYR 12 1 $traindir/$outprefix.wy.year
+#exit
+$BINDIR/x_to_annual $traindir/$outprefix.wy $STARTWY $ENDYR 12 1 > $traindir/$outprefix.wy.year
+
+#############################
+## Create quantile lookups ##
+#############################
+
+$SCRDIR/create_quantile_lookups.bsh $traindir/$outprefix.wy $JNKDIR $BINDIR

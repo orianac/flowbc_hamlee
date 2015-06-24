@@ -1,0 +1,15 @@
+
+##############################
+## SCENARIO TIME ACCOUNTING ##
+##############################
+
+## OBSERVED ##
+SCEN=observed
+STARTYR=1950
+ENDYR=2005
+STARTWY=$((STARTYR+1))
+STARTNR_MON=268 # 38 this skips usgs monthly time series header to October start (first record)
+ENDNR_MON=927
+STARTNR_DAY=8218
+ENDNR_DAY=28216
+

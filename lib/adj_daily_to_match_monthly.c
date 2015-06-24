@@ -74,7 +74,7 @@ else {
 
 }
    for(j=0;j<dpm[mnth]; j++) {
-fprintf(outfile, "%10.0f\n", adjfrac*bcmdata[j]);
+fprintf(outfile, "%10.3f\n", adjfrac*bcmdata[j]);
 
    }
 

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#############################################################
+## Step 1 Create quantile maps for simulated training data ##
+#############################################################
+
+trainmodid=$1 #ulm_RoutedRunoff_NorESM1-M_r1i1p1_historical_1950_2005_WUSA_daily.monsum.nc.2.txt
+cfg_proj=$2 #cfg_projects/cfg_test1.bsh
+cfg_mod=$3 #cfg_projects/cfg_test1.hist.bsh
+
+source $cfg_proj
+
+mkdir -p $DIR_RAW_MOD $DIR_RAW_OBS $DIR_TRAINING_MOD $DIR_BC
+
+mod_monthly=$DIR_RAW_MOD/$trainmodid
+
+$SCRDIR/worker_gen_inputs2.bsh $mod_monthly $trainmodid $cfg_proj $cfg_mod $DIR_TRAINING_MOD
+

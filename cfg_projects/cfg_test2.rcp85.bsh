@@ -1,0 +1,17 @@
+
+##############################
+## SCENARIO TIME ACCOUNTING ##
+##############################
+
+## RCP45 ##
+## RCP85 ##
+SCEN=rcp85
+STARTYR=2006
+ENDYR=2099
+STARTWY=$((STARTYR+1))
+STARTNR_MON=10
+ENDNR_MON=1125
+STARTNR_DAY=274
+ENDNR_DAY=34241
+
+
