@@ -1,0 +1,15 @@
+
+###############################
+## PATH and FILE CONNECTIONS ##
+###############################
+
+DIR_RAW_MOD=/home/stumbaugh/devel/flowbc_hamlee/example_data/vic.bcc-csm1-1-m
+DIR_RAW_OBS=/home/stumbaugh/devel/flowbc_hamlee/example_data/NRNI
+DIR_TRAINING=/home/stumbaugh/devel/flowbc_hamlee/example_data/training
+DIR_TRAINING_MOD=/home/stumbaugh/devel/flowbc_hamlee/example_data/training
+DIR_BC=/home/stumbaugh/devel/flowbc_hamlee/example_data/output
+
+BINDIR=/home/stumbaugh/devel/flowbc_hamlee/bin
+SCRDIR=/home/stumbaugh/devel/flowbc_hamlee/scripts
+JNKDIR=/home/stumbaugh/devel/flowbc_hamlee/JNK
+

@@ -100,7 +100,7 @@ if(unitsw == 1)  adjfrac = (sum1*nday)/sum2;
      }
 
    for(j=0;j<ppy;j++) {
-fprintf(outfile, "%10.0f\n", adjfrac*bcmdata[j]);
+fprintf(outfile, "%10.3f\n", adjfrac*bcmdata[j]);
    
  }
 

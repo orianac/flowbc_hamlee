@@ -1,0 +1,16 @@
+#!/bin/bash
+
+############################################################
+## Step 1 Create quantile maps for observed training data ##
+############################################################
+
+trainobsid=$1 #NRNI_20150318_clean_fixed_MRS-prepped.recTime.monsum.nc.0.txt
+cfg_proj=$2 #cfg_projects/cfg_test1.bsh
+cfg_obs=$3 #cfg_projects/cfg_test1.obs.bsh
+
+source $cfg_proj
+
+mkdir -p $DIR_RAW_OBS $DIR_TRAINING $DIR_BC
+
+obs_monthly=$DIR_RAW_OBS/$trainobsid
+$SCRDIR/worker_gen_inputs2.bsh $obs_monthly $trainobsid $cfg_proj $cfg_obs $DIR_TRAINING

@@ -1,0 +1,15 @@
+
+##############################
+## SCENARIO TIME ACCOUNTING ##
+##############################
+
+## HISTORICAL ##
+SCEN=historical
+STARTYR=1950
+ENDYR=2005
+STARTWY=$((STARTYR+1))
+STARTNR_MON=10
+ENDNR_MON=669
+STARTNR_DAY=274
+ENDNR_DAY=20362
+
