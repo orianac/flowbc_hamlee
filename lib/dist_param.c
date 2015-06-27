@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
   FILE *infile;
 
   float zvalue[4]={1.64, 2.05, 2.32, 2.57};
-  float a,ad,data[100], sort[100], sum[2], out[6], max, med, min, getdata;
+  float a,ad,data[100], sort[100], sum[4], out[6], max, med, min, getdata;
 
   void shell(int n, float a[]);
 
