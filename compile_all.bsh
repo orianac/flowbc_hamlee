@@ -11,6 +11,8 @@ cd lib
 #compile all c programs into bin directory
 for i in $(find . -name '*.c');
 do
-gcc -o ../bin/$i $i -lm;
+program=${i##*/}			        #clear beginning "./" from find
+program=${program%%.*}				#clear ".c" from end of name
+gcc -o ../bin/$program $i -lm;		#compile
 done;
 
