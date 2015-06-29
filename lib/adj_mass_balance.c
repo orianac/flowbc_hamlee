@@ -55,7 +55,7 @@ exit (0);
  while( fscanf(configfile,"%d",&numstat) != EOF){ 
 
     for(i=0;i<numstat; i++){
-      fscanf(configfile,"%s", &name[i]);
+      fscanf(configfile,"%s", name[i]);
        printf("%s\n", name[i]);
     }
 

@@ -1,11 +1,18 @@
 #!/bin/bash
 
-#This program compiles a list of c programs in the current directory
+#This program compiles the c programs in the lib directory
 
-for filestr in adj_annual_total   bias_correct_month  create_incremental_raw_data  ln3_param make_final_files  adj_mass_balance   bias_correct_split_month  create_incremental_training_data   ln_param   month_to_annual  bias_correct   bias_correct_year   dist_param   make_final_files_14   x_to_annual adj_daily_to_match_monthly_boundary adj_daily_to_match_monthly
+#create bin directory if it doesn't exist
+mkdir -p bin
+
+#move to lib directory
+cd lib
+
+#compile all c programs into bin directory
+for i in $(find . -name '*.c');
 do
-#ls $filestr
- gcc -o bin/$filestr lib/$filestr".c" -lm
-
-done
+program=${i##*/}			        #clear beginning "./" from find
+program=${program%%.*}				#clear ".c" from end of name
+gcc -o ../bin/$program $i -lm;		#compile
+done;
 
