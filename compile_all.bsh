@@ -2,6 +2,8 @@
 
 #This program compiles a list of c programs in the current directory
 
+mkdir -p bin
+
 for filestr in adj_annual_total   bias_correct_month  create_incremental_raw_data  ln3_param make_final_files  adj_mass_balance   bias_correct_split_month  create_incremental_training_data   ln_param   month_to_annual  bias_correct   bias_correct_year   dist_param   make_final_files_14   x_to_annual adj_daily_to_match_monthly_boundary adj_daily_to_match_monthly
 do
 #ls $filestr

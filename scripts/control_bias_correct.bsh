@@ -21,9 +21,8 @@ trainobsdir=$DIR_TRAINING/$trainobsid
 trainmoddir=$DIR_TRAINING_MOD/$trainmodid 
 
 ## Extract water years from model monthly and daily timeseries ##
-
-awk '{if(NR >= '$STARTNR_MON'  && NR <= '$ENDNR_MON') print $2;}' $DIR_RAW_MOD/$siteid.monmean.nc.$sitenum.txt > $DIR_BC/$siteid.$sitenum.wy.monthly
-awk '{ if( NR >= '$STARTNR_DAY' && NR <= '$ENDNR_DAY') print $2}' $DIR_RAW_MOD/$siteid.nc.$sitenum.txt > $DIR_BC/$siteid.$sitenum.wy.dayflow
+awk '{if(NR >= '$STARTNR_MON'  && NR <= '$ENDNR_MON') print $2;}' $DIR_RAW_MOD/${siteid}_monthly_mean_$sitenum.txt > $DIR_BC/$siteid.$sitenum.wy.monthly
+awk '{ if( NR >= '$STARTNR_DAY' && NR <= '$ENDNR_DAY') print $2}' $DIR_RAW_MOD/${siteid}_daily_$sitenum.txt > $DIR_BC/$siteid.$sitenum.wy.dayflow
 
 ##############################################
 ## Step 2 make monthly bias-corrected flows ##
@@ -40,6 +39,7 @@ $BINDIR/bias_correct $trainobsdir.wy.quantiles $trainmoddir.wy.quantiles \
                $DIR_BC/$siteid.$sitenum.wy.monthly $DIR_BC/$siteid.$sitenum.wy.monthly.bc  \
                $dist_opt 12
 
+
 $BINDIR/bias_correct $trainobsdir.wy.year.quantiles $trainmoddir.wy.year.quantiles \
                $DIR_BC/$siteid.$sitenum.wy.year $DIR_BC/$siteid.$sitenum.wy.year.bc \
                $dist_opt 1
@@ -52,18 +52,15 @@ $BINDIR/adj_annual_total $DIR_BC/$siteid.$sitenum.wy.monthly.bc \
 ############################################
 ## Step 3 make daily bias-corrected flows ##
 ############################################
-
 # scale daily vic flow to monthly bias corrected time series
 $BINDIR/adj_daily_to_match_monthly $DIR_BC/$siteid.$sitenum.wy.dayflow \
                              $DIR_BC/$siteid.$sitenum.wy.monthly.bc.fx \
                              $DIR_BC/$siteid.$sitenum.wy.day.bc.fx \
                              $STARTWY $ENDYR 0
-
 # make smooth boundary between the last day in month to the first day in the following month
 $BINDIR/adj_daily_to_match_monthly_boundary $DIR_BC/$siteid.$sitenum.wy.day.bc.fx  \
                                       $DIR_BC/$siteid.$sitenum.wy.day.bc.fx.a \
                                       $STARTWY $ENDYR
-
 # Adjust mass balance again
 $BINDIR/adj_daily_to_match_monthly $DIR_BC/$siteid.$sitenum.wy.day.bc.fx.a \
                              $DIR_BC/$siteid.$sitenum.wy.monthly.bc.fx \
